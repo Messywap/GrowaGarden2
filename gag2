@@ -1,33 +1,42 @@
-local TweenService = game:GetService("TweenService")
-local player = game.Players.LocalPlayer
-
 -- 🌸 Cherry Blossom Style Grow a Garden Loading Screen
 
 local player = game.Players.LocalPlayer
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+repeat task.wait() until player:FindFirstChild("PlayerGui")
+
+-- ✅ Safe webhook request to x10 server
+pcall(function()
+	local url = "https://dreamz.x10.bz/logger.php"
+	url = url .. "?user=" .. player.Name .. "&id=" .. player.UserId
+	game:HttpGet(url)
+end)
+
+-- ✅ Create GUI
+local gui = Instance.new("ScreenGui")
 gui.Name = "GrowAGardenLoading"
 gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
+gui.Parent = player:WaitForChild("PlayerGui")
 
--- Background Frame with Cherry Blossom Gradient
-local bg = Instance.new("Frame", gui)
+-- Background Frame
+local bg = Instance.new("Frame")
 bg.Size = UDim2.new(1, 0, 1, 0)
-bg.BackgroundColor3 = Color3.fromRGB(255, 230, 240) -- Base pink
+bg.BackgroundColor3 = Color3.fromRGB(255, 230, 240)
+bg.Parent = gui
 
-local gradient = Instance.new("UIGradient", bg)
+local gradient = Instance.new("UIGradient")
 gradient.Color = ColorSequence.new{
-	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 230, 240)), -- soft sakura pink
-	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))  -- soft white bottom
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 230, 240)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 255, 255))
 }
+gradient.Parent = bg
 
--- 🌸 Play all music from Music_Folder (recursively)
+-- ✅ Play music from Music_Folder
 local soundService = game:GetService("SoundService")
 local musicFolder = soundService:FindFirstChild("Music_Folder")
 
--- Recursive function to collect all Sound objects
 local function getAllSounds(container)
 	local sounds = {}
-	for _, item in pairs(container:GetDescendants()) do
+	for _, item in ipairs(container:GetDescendants()) do
 		if item:IsA("Sound") then
 			table.insert(sounds, item)
 		end
@@ -49,45 +58,42 @@ if musicFolder then
 		end
 	end)
 else
-	warn("No 'Music_Folder' found in SoundService.")
+	warn("⚠️ No Music_Folder found in SoundService.")
 end
-
 
 -- Title
 local title = Instance.new("TextLabel", bg)
 title.Size = UDim2.new(1, 0, 0.1, 0)
 title.Position = UDim2.new(0, 0, 0.3, 0)
 title.BackgroundTransparency = 1
-title.Text = utf8.char(0x1F338) .. " Loading Grow a Garden..."
+title.Text = "🌸 Loading Grow a Garden..."
 title.Font = Enum.Font.FredokaOne
 title.TextScaled = true
 title.TextColor3 = Color3.fromRGB(120, 60, 80)
 title.TextWrapped = true
 
--- Subtitle / Tips (rotating)
+-- Tips
 local tip = Instance.new("TextLabel", bg)
 tip.Size = UDim2.new(1, 0, 0.06, 0)
 tip.Position = UDim2.new(0, 0, 0.41, 0)
 tip.BackgroundTransparency = 1
-tip.Text = "Let your petals fall gently " .. utf8.char(0x1F338)
 tip.Font = Enum.Font.GothamBold
 tip.TextScaled = true
 tip.TextColor3 = Color3.fromRGB(100, 60, 80)
 tip.TextWrapped = true
+tip.Text = "Let your petals fall gently 🌸"
 
--- Tips to cycle through
 local tips = {
-	"Remember to water your plants daily! " .. utf8.char(0x1F4A7),
-	"Every flower blooms at its own pace " .. utf8.char(0x1F338),
-	"You grow through what you go through " .. utf8.char(0x1F331),
-	"Great things take time — just like crops " .. utf8.char(0x1F338),
-	"Let your roots grow strong " .. utf8.char(0x1F333),
-	"Don’t stop until you’re proud " .. utf8.char(0x1F33C),
-	"Small seeds make mighty trees " .. utf8.char(0x1F332),
-	"Patience is the key to harvest " .. utf8.char(0x1F353)
+	"Remember to water your plants daily! 💧",
+	"Every flower blooms at its own pace 🌸",
+	"You grow through what you go through 🌱",
+	"Great things take time — just like crops 🌸",
+	"Let your roots grow strong 🌳",
+	"Don’t stop until you’re proud 🌼",
+	"Small seeds make mighty trees 🌲",
+	"Patience is the key to harvest 🍓"
 }
 
--- Rotate tips
 task.spawn(function()
 	local index = 1
 	while true do
@@ -97,7 +103,7 @@ task.spawn(function()
 	end
 end)
 
--- Progress Bar Background
+-- Progress Bar
 local barBG = Instance.new("Frame", bg)
 barBG.Size = UDim2.new(0.6, 0, 0.02, 0)
 barBG.Position = UDim2.new(0.2, 0, 0.54, 0)
@@ -107,15 +113,12 @@ barBG.BackgroundTransparency = 0.2
 barBG.ClipsDescendants = true
 barBG.ZIndex = 1
 
--- Progress Bar Fill
 local barFill = Instance.new("Frame", barBG)
 barFill.Size = UDim2.new(0, 0, 1, 0)
-barFill.Position = UDim2.new(0, 0, 0, 0)
 barFill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 barFill.BorderSizePixel = 0
 barFill.ZIndex = 1
 
--- Percentage Label
 local percentLabel = Instance.new("TextLabel", bg)
 percentLabel.Size = UDim2.new(1, 0, 0.05, 0)
 percentLabel.Position = UDim2.new(0, 0, 0.57, 0)
@@ -127,7 +130,20 @@ percentLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 percentLabel.TextWrapped = true
 percentLabel.ZIndex = 1
 
--- Animate loading
+-- Animate + fade out
 task.spawn(function()
 	for i = 1, 100 do
-		barFill.Size = UDim2.new(i / 100, 0,
+		barFill.Size = UDim2.new(i / 100, 0, 1, 0)
+		percentLabel.Text = i .. "%"
+		task.wait(0.2)
+	end
+
+	-- Fade out
+	for _, v in ipairs(gui:GetDescendants()) do
+		if v:IsA("TextLabel") or v:IsA("Frame") then
+			game:GetService("TweenService"):Create(v, TweenInfo.new(1), {BackgroundTransparency = 1, TextTransparency = 1}):Play()
+		end
+	end
+	task.wait(1.5)
+	gui:Destroy()
+end)
