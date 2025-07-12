@@ -1,9 +1,7 @@
--- 🌿 Load Spawner
-local Spawner = loadstring(game:HttpGet("https://codeberg.org/GrowAFilipino/GrowAGarden/raw/branch/main/Spawner.lua"))()
+-- 🌸 Load Rayfield UI Framework from Sirius
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
--- 🌸 Load UI Framework
-local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/Messywap/GrowaGarden2/refs/heads/main/field'))()
-
+-- 🌟 Create Main Window
 local Window = Rayfield:CreateWindow({
    Name = "DreamzHUB",
    Icon = 0,
@@ -31,131 +29,107 @@ local Window = Rayfield:CreateWindow({
    }
 })
 
--- 🧪 Spawners Tab
+-- 🧪 Spawners Tab (UI Only)
 local TabSpawners = Window:CreateTab("🧪 Spawners")
-
--- 🦝 Pet Spawner Section
-local PetSection = TabSpawners:CreateSection("🦝 Pet Spawner")
-
-local SelectedPet = "Raccoon"
-local PetWeight = "1"
-local PetAge = "1"
-
+TabSpawners:CreateSection("🦝 Pet Spawner")
 TabSpawners:CreateDropdown({
    Name = "Pet Type",
-   Options = Spawner.GetPets(),
+   Options = {-- Common
+  "Dog","Golden Lab","Bunny","Crab","Seagull","Starfish",
+  -- Uncommon
+  "Black Bunny","Cat","Chicken","Deer",
+  -- Rare
+  "Orange Tabby","Spotted Deer","Pig","Rooster","Monkey",
+  -- Legendary
+  "Cow","Silver Monkey","Sea Otter","Turtle","Polar Bear","Mole","Frog",
+  "Panda","Blood Kiwi","Blood Hedgehog","Moon Cat","Tarantula Hawk","Moth",
+  "Ostrich","Peacock","Capybara","Scarlet Macaw","Meerkat","Sand Snake","Raptor",
+  "Triceratops","Pterodactyl","Stegosaurus","Bald Eagle",
+  -- Mythical
+  "Grey Mouse","Brown Mouse","Squirrel","Red Giant Ant","Red Fox",
+  -- Special/Other
+  "Snail","Giant Ant","Caterpillar","Praying Mantis","Dragonfly","Flamingo",
+  "Toucan","Sea Turtle","Orangutan","Seal","Honey Bee","Wasp","Pack Bee","Queen Bee",
+  "Butterfly","Disco Bee","Tarantula Hawk","Rooster","Hedgehog","Chicken Zombie",
+  "Moon Cat","Raccoon","Bear Bee","Blood Owl","Mimic Octopus","Fennec Fox",
+  "Hyacinth Macaw","Giant Ant","Mini Octopus","Brontosaurus","Bald Eagle","Raptor"},
    CurrentOption = {"Raccoon"},
    MultipleOptions = false,
-   Flag = "PetDropdown",
-   Callback = function(option)
-      SelectedPet = option[1]
-   end,
 })
-
 TabSpawners:CreateInput({
    Name = "Pet Weight",
    CurrentValue = "1",
    PlaceholderText = "1",
-   RemoveTextAfterFocusLost = false,
-   Flag = "PetWeight",
-   Callback = function(value)
-      PetWeight = value
-   end,
 })
-
 TabSpawners:CreateInput({
    Name = "Pet Age",
    CurrentValue = "1",
    PlaceholderText = "1",
-   RemoveTextAfterFocusLost = false,
-   Flag = "PetAge",
-   Callback = function(value)
-      PetAge = value
-   end,
 })
-
 TabSpawners:CreateButton({
    Name = "Spawn Pet",
    Callback = function()
-      Spawner.SpawnPet(SelectedPet, tonumber(PetWeight), tonumber(PetAge))
-      Rayfield:Notify({
-         Title = "🐾 Pet Spawned",
-         Content = "Spawned a " .. SelectedPet,
-         Duration = 3
-      })
    end,
 })
 
--- 🥚 Egg Spawner Section
-local EggSection = TabSpawners:CreateSection("🥚 Egg Spawner")
-
-local EggName = "Night Egg"
-
+TabSpawners:CreateSection("🥚 Egg Spawner")
 TabSpawners:CreateDropdown({
    Name = "Limited Egg Type",
-   Options = Spawner.GetEggs and Spawner.GetEggs() or {
-      "Anti Bee Egg", "Bee Egg", "Bug Egg", "Common Egg",
-      "Common Summer Egg", "Exotic Bug Egg", "Legendary Egg",
-      "Mythical Egg", "Night Egg", "Oasis Egg",
-      "Paradise Egg", "Premium Anti Bee Egg",
-      "Premium Night Egg", "Rare Summer Egg"
+   Options = {
+      -- Standard / Current Eggs
+      "Common Egg", "Uncommon Egg", "Rare Egg", "Legendary Egg",
+      "Mythical Egg", "Bug Egg", "Common Summer Egg", "Rare Summer Egg",
+      "Paradise Egg", "Oasis Egg", "Bee Egg", "Anti Bee Egg",
+      "Night Egg", "Premium Night Egg", "Dinosaur Egg",
+
+      -- Unobtainable / Disabled Eggs
+      "Uncommon Egg (Disabled)", "Rare Egg (Disabled)", "Legendary Egg (Disabled)"
    },
    CurrentOption = {"Night Egg"},
    MultipleOptions = false,
-   Callback = function(option)
-      EggName = option[1]
-   end
 })
-
 TabSpawners:CreateButton({
    Name = "Spawn Egg",
    Callback = function()
-      Spawner.SpawnEgg(EggName)
-      Rayfield:Notify({
-         Title = "🥚 Egg Spawned",
-         Content = "Spawned " .. EggName,
-         Duration = 3
-      })
-   end
+   end,
 })
 
--- 🌱 Seed Spawner Section
-local SeedSection = TabSpawners:CreateSection("🌱 Seed Spawner")
-
-local SelectedSeed = "Sunflower"
-
+TabSpawners:CreateSection("🌱 Seed Spawner")
 TabSpawners:CreateDropdown({
    Name = "Seed Type",
-   Options = Spawner.GetSeeds(),
+   Options = {-- Common
+  "Carrot","Strawberry","Blueberry","Rose","Orange Tulip","Stonebite","Tomato","Daffodil","Cauliflower",
+  -- Legendary
+  "Watermelon","Pumpkin","Avocado","Green Apple","Apple","Banana","Lilac","Aloe Vera","Bamboo","Rafflesia","Horned Dinoshroom","Boneboo",
+  -- Mythical
+  "Peach","Pineapple","Guanabana","Coconut","Cactus","Dragon Fruit","Mango","Kiwi","Bell Pepper","Prickly Pear","Pink Lily","Purple Dahlia","Firefly Fern",
+  -- Divine
+  "Grape","Loquat","Sunflower","Pitcher Plant","Fossilight",
+  -- Prismatic
+  "Beanstalk","Ember Lily","Burning Bud","Sugar Apple",
+  -- Transcendent
+  "Bone Blossom",
+  -- Unobtainable (all rarities)
+  "Pink Tulip","Chocolate Carrot","Red Lollipop","Nightshade","Crocus","Lavender","Manuka Flower","Wild Carrot","Blue Lollipop","Candy Sunflower","Mint",
+  "Glowshroom","Dandelion","Nectarshade","Succulent","Bee Balm","Pear","Delphinium","Liberty Lily","Noble Flower","Cranberry","Durian","Papaya",
+  "Moonflower","Starfruit","Lumira","Violet Corn","Nectar Thorn","Cantaloupe","Firework Flower","White Mulberry","Easter Egg","Eggplant",
+  "Passionfruit","Lemon","Moonglow","Moon Melon","Blood Banana","Celestiberry","Nectarine","Honeysuckle","Suncoil","Bendboo","Cocovine",
+  "Parasol Flower","Lily of the Valley","Ice Cream Bean","Lime","Cherry Blossom","Crimson Vine","Candy Blossom","Lotus","Venus Fly Trap",
+  "Cursed Fruit","Soul Fruit","Mega Mushroom","Moon Blossom","Moon Mango","Hive Fruit","Dragon Pepper","Rosy Delight","Traveler’s Fruit",
+  "Elephant Ears","Purple Cabbage"},
+
    CurrentOption = {"Sunflower"},
    MultipleOptions = false,
-   Flag = "SeedDropdown",
-   Callback = function(option)
-      SelectedSeed = option[1]
-   end,
 })
 
 TabSpawners:CreateButton({
    Name = "Spawn Seed",
    Callback = function()
-      Spawner.SpawnSeed(SelectedSeed)
-      Rayfield:Notify({
-         Title = "🌱 Seed Spawned",
-         Content = "Spawned " .. SelectedSeed,
-         Duration = 3
-      })
    end,
 })
-
 TabSpawners:CreateButton({
    Name = "Spin",
    Callback = function()
-      Spawner.Spin(SelectedSeed)
-      Rayfield:Notify({
-         Title = "🔁 Spinning",
-         Content = "Spun " .. SelectedSeed,
-         Duration = 3
-      })
    end,
 })
 
@@ -210,7 +184,7 @@ end
 -- 👑 Other Tab
 local TabOther = Window:CreateTab("👑 Other")
 
-TabOther:CreateSection("🕰️ Join Old Servers")
+TabOther:CreateSection("🥰 Join Old Servers")
 TabOther:CreateDropdown({
    Name = "Game Version",
    Options = {"Version 1235", "Version 1229", "Version 1214"},
@@ -240,25 +214,36 @@ TabOther:CreateButton({
 TabOther:CreateSection("👾 Duplicate Pets")
 
 local SelectedDupPet = "Raccoon"
+
 TabOther:CreateDropdown({
    Name = "Pet Type",
-   Options = Spawner.GetPets(),
+   Options = {-- Common
+  "Dog","Golden Lab","Bunny","Crab","Seagull","Starfish",
+  -- Uncommon
+  "Black Bunny","Cat","Chicken","Deer",
+  -- Rare
+  "Orange Tabby","Spotted Deer","Pig","Rooster","Monkey",
+  -- Legendary
+  "Cow","Silver Monkey","Sea Otter","Turtle","Polar Bear","Mole","Frog",
+  "Panda","Blood Kiwi","Blood Hedgehog","Moon Cat","Tarantula Hawk","Moth",
+  "Ostrich","Peacock","Capybara","Scarlet Macaw","Meerkat","Sand Snake","Raptor",
+  "Triceratops","Pterodactyl","Stegosaurus","Bald Eagle",
+  -- Mythical
+  "Grey Mouse","Brown Mouse","Squirrel","Red Giant Ant","Red Fox",
+  -- Special/Other
+  "Snail","Giant Ant","Caterpillar","Praying Mantis","Dragonfly","Flamingo",
+  "Toucan","Sea Turtle","Orangutan","Seal","Honey Bee","Wasp","Pack Bee","Queen Bee",
+  "Butterfly","Disco Bee","Tarantula Hawk","Rooster","Hedgehog","Chicken Zombie",
+  "Moon Cat","Raccoon","Bear Bee","Blood Owl","Mimic Octopus","Fennec Fox",
+  "Hyacinth Macaw","Giant Ant","Mini Octopus","Brontosaurus","Bald Eagle","Raptor"},
    CurrentOption = {"Raccoon"},
    MultipleOptions = false,
    Flag = "DuplicatePetDropdown",
-   Callback = function(option)
-      SelectedDupPet = option[1]
+   Callback = function()
    end,
 })
-
 TabOther:CreateButton({
    Name = "Duplicate",
    Callback = function()
-      Spawner.SpawnPet(SelectedDupPet, 1, 1)
-      Rayfield:Notify({
-         Title = "🐾 Pet Duplicated",
-         Content = "Spawned another " .. SelectedDupPet,
-         Duration = 3
-      })
    end,
 })
